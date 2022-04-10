@@ -15,3 +15,13 @@ def test_linked_list():
             assert node.right is not None
         else:
             assert node.right is None
+
+
+def test_delete_middle_node():
+    nodes = [Node(random.randint(0, 10)) for _ in range(3)]
+    linkedlist = LinkedList(*nodes)
+    next(linkedlist)
+    linkedlist.delete_current()
+    assert linkedlist.current.right is not None
+    assert linkedlist.current.left is None
+
