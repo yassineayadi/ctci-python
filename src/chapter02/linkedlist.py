@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Sequence
 
 
 @dataclass
@@ -67,7 +67,7 @@ class LinkedList:
         current.delete()
 
     @classmethod
-    def from_list(cls, arr: list) -> "LinkedList":
+    def from_list(cls, arr: Sequence) -> "LinkedList":
         nodes = [Node(value=item) for item in arr]
         return cls(*nodes)
 
