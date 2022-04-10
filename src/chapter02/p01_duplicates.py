@@ -7,11 +7,11 @@ def remove_duplicates(linkedlist: LinkedList) -> LinkedList:
     while getattr(current, "value", None):
         if current.value in seen:
             node = current
-            current = node.right
+            current = node.next
             node.delete()
         else:
             seen.add(current.value)
-            current = current.right
+            current = current.next
     return linkedlist
 
 
