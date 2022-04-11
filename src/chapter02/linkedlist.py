@@ -121,8 +121,15 @@ class LinkedList:
 
     @classmethod
     def from_list(cls, arr: Sequence) -> "LinkedList":
+
         nodes = [Node(value=item) for item in arr]
         return cls(*nodes)
+
+    @classmethod
+    def from_integers(cls, integers: int) -> "LinkedList":
+        integers = [int(i) for i in str(integers)]
+        integers.reverse()
+        return cls.from_list(integers)
 
     def to_list(self) -> list:
         return [node.value for node in self if node.value]
