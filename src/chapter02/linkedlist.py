@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from itertools import count
 from typing import Any, Sequence
 from copy import deepcopy
 
@@ -67,6 +68,9 @@ class LinkedList:
             yield current
             current = current.next
 
+    def __len__(self) -> int:
+        return len([node for node in self])
+
     def add(self, value):
         node = Node(value)
         if not self.head:
@@ -104,7 +108,6 @@ class LinkedList:
                     self.head = self.current = before_node
                 n.prev = before_node
                 before_node.next = n
-                # self.current = before_node
                 break
 
     def iter_with_direction(self, direction: str = "right"):
