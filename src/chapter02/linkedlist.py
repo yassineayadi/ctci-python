@@ -132,4 +132,10 @@ class LinkedList:
         return cls.from_list(integers)
 
     def to_list(self) -> list:
-        return [node.value for node in self if node.value]
+        return [node.value for node in self if node.value is not None]
+
+    def to_numeric(self) -> int:
+        result = 0
+        for idx, node in enumerate(self):
+            result += node.value * (10 ** idx)
+        return result
