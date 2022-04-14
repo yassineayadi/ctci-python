@@ -28,13 +28,18 @@ class Stack:
         return current
 
     def peek(self):
-        if not self.top:
-            raise EmptyStackError()
-        return self.top.data
+        if self.top:
+            return self.top.data
 
     def __iter__(self):
         while self.top:
             yield self.pop()
+
+    def peek_all(self):
+        current = self.top
+        while current:
+            yield current
+            current = current.next
 
     def push_multiple(self, *data):
         for d in data:
@@ -45,6 +50,10 @@ class Stack:
         stack = cls()
         stack.push_multiple(*data)
         return stack
+
+    @property
+    def is_empty(self) -> bool:
+        return not bool(self.top)
 
 
 @dataclass
