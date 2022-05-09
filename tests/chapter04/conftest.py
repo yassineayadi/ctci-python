@@ -1,5 +1,7 @@
 import pytest
 
+from chapter04.trees import BinaryTree
+
 
 @pytest.fixture
 def graph():
@@ -30,3 +32,20 @@ def adjacency_list():
         [9],  # 8
         [],  # 9
     ]
+
+
+@pytest.fixture
+def btree():
+    tree = BinaryTree()
+    tree.insert(10)
+    tree.insert(5)
+    tree.insert(-3)
+    tree.insert(3)
+
+    tree.root.left.insert(1)
+    tree.root.left.right.insert(2)
+    tree.root.right.insert(11)
+    tree.root.left.left.insert(3)
+    tree.root.left.left.insert(-2)
+    tree.root.left.right.insert(1)
+    return tree
