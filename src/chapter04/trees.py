@@ -39,11 +39,39 @@ class BinaryNode:
 
     def insert(self, data):
         if self.left is None:
-            self.left = BinaryNode(data)
+            self.left = BinaryNode(data, parent=self)
+            return self.left
         elif self.right is None:
-            self.right = BinaryNode(data)
+            self.right = BinaryNode(data, parent=self)
+            return self.right
         else:
-            self.left.insert(data)
+            min_node = (
+                self.left if self.left.height <= self.right.height else self.right
+            )
+            return min_node.insert(data)
+
+    @property
+    def height(self):
+        right_height = self.right.height if self.right else 0
+        left_height = self.left.height if self.left else 0
+        return max([left_height, right_height]) + 1
+
+    def disp(self, nesting=0):
+        indent = " " * nesting * 2
+        output = f"{self.data} (height={self.height})\n"
+        if self.left is not None:
+            output += f"{indent}L:"
+            output += self.left.disp(nesting + 1)
+        if self.right is not None:
+            output += f"{indent}R:"
+            output += self.right.disp(nesting + 1)
+        return output
+
+    def __str__(self):
+        return self.disp()
+
+    def __repr__(self):
+        return self.disp()
 
 
 @dataclass
@@ -59,37 +87,17 @@ class BinarySearchNode(BinaryNode):
                 if self.left:
                     self.left.insert(data)
                 else:
-                    self.left = BinarySearchNode(data)
+                    self.left = BinarySearchNode(data, parent=self)
             else:
                 if self.right:
                     self.right.insert(data)
                 else:
-                    self.right = BinarySearchNode(data)
+                    self.right = BinarySearchNode(data, parent=self)
         else:
             self.data = data
 
-    @property
-    def height(self):
-        right_height = self.right.height if self.right else 0
-        left_height = self.left.height if self.left else 0
-        return max([left_height, right_height]) + 1
-
     def __repr__(self):
-        self.disp()
-
-    def disp(self, nesting=0):
-        indent = " " * nesting * 2
-        output = f"{self.data}\n"
-        if self.left is not None:
-            output += f"{indent}L:"
-            output += self.left.disp(nesting + 1)
-        if self.right is not None:
-            output += f"{indent}R:"
-            output += self.right.disp(nesting + 1)
-        return output
-
-    def __str__(self):
-        return self.disp()
+        return super().__repr__()
 
 
 @dataclass
@@ -99,8 +107,15 @@ class BinaryTree:
     def insert(self, data):
         if not self.root:
             self.root = BinaryNode(data)
+            return self.root
         else:
-            self.root.insert(data)
+            return self.root.insert(data)
+
+    def __repr__(self):
+        if self.root:
+            return self.root.__repr__()
+        else:
+            return "Empty Tree"
 
 
 @dataclass
@@ -112,6 +127,9 @@ class BinarySearchTree(BinaryTree):
             self.root = BinarySearchNode(data)
         else:
             self.root.insert(data)
+
+    def __repr__(self):
+        return self.root.__repr__()
 
 
 def in_order_traversal(node: BinarySearchNode):
