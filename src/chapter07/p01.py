@@ -1,8 +1,8 @@
 import random
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import dataclass
 from enum import Enum
-from typing import Tuple, Set, List
+from typing import Set, List
 
 
 class Suite(Enum):
@@ -30,15 +30,10 @@ class Deck:
 
 
 @dataclass
-class Player:
-    name: str
-
-
-@dataclass
 class Hand:
     cards: List[Card]
 
-    def add_cart(self, card: Card):
+    def add_card(self, card: Card):
         self.cards.append(card)
 
     @property
@@ -51,7 +46,17 @@ class Hand:
 
     @property
     def misses_cards(self):
-        return self.size < 7
+        return False
+
+
+class BlackJackHand(Hand):
+    @property
+    def misses_cards(self):
+        return self.size <= 7
+
+    @property
+    def score(self):
+        return super().score
 
 
 class CardGame(ABC):
@@ -67,27 +72,27 @@ class BlackJack(CardGame):
         self.cards = cards
         self.number_of_players = number_of_players
 
+    @property
+    def remaining_cards(self) -> int:
+        return len(self.cards)
+
     def shuffle_cards(self) -> None:
         cards = self.cards
         shuffled = []
-        for i in range(len(self.cards)):
+        for i in range(self.remaining_cards):
             card = random.choice(self.cards)
             cards.remove(card)
             shuffled.append(card)
         self.cards = shuffled
 
-    def distribute(self, hand: Hand):
-        while hand.size <= 7:
+    def distribute(self, hand: BlackJackHand):
+        while hand.misses_cards:
             self.deal_card(hand)
 
     def deal_card(self, hand: Hand):
-        if self.remaining_cards > 0:
+        if self.remaining_cards:
             card = self.cards.pop()
             hand.cards.append(card)
-
-    @property
-    def remaining_cards(self) -> int:
-        return len(self.cards)
 
 
 def generate_set_of_cards() -> Set:
