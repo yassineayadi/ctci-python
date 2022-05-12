@@ -25,7 +25,8 @@ def clear_pairs(number: int):
         mask |= 1
     return number & mask
 
-def swap_odds_and_pairs(number:int):
+
+def swap_odds_and_pairs(number: int):
     odds = clear_pairs(number) >> 1
     pairs = clear_odds(number) << 1
     return odds | pairs
