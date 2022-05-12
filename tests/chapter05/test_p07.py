@@ -18,6 +18,6 @@ def test_clear_pairs_with_only_odds(odds):
 
 
 def test_swap_odds_and_pairs():
-    number = 0b01010001
-    expected = 0b10100010
-    assert swap_odds_and_pairs(number) == expected
+    input_number = 0b011010
+    expected_number = 0b100101
+    assert swap_odds_and_pairs(input_number) == expected_number

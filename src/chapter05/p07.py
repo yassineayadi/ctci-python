@@ -20,11 +20,12 @@ def clear_pairs(number: int):
             mask |= 1
         else:
             mask <<= 1
-    mask = mask << 1 if not size % 2 == 0 else mask
+    if not size % 2 == 0:
+        mask <<= 1
+        mask |= 1
     return number & mask
 
-
-def swap_odds_and_pairs(number: int) -> int:
-    shifted_pairs = clear_odds(number) << 1
-    shifted_odds = clear_pairs(number) >> 1
-    return shifted_pairs | shifted_odds
+def swap_odds_and_pairs(number:int):
+    odds = clear_pairs(number) >> 1
+    pairs = clear_odds(number) << 1
+    return odds | pairs

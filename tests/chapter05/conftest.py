@@ -2,11 +2,11 @@ import pytest
 
 
 @pytest.fixture
-def odds():
-    return 0b010101010
+def pairs():
+    return 0b01010101
 
 
 @pytest.fixture
-def pairs():
-    return 0b01010101
+def odds():
+    return 0b010101010
 
