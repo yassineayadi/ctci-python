@@ -7,7 +7,6 @@ he or she must escalate the call to a manager. If the manager is not free or not
 be escalated to a director. Design the classes and data structures for this problem.
 
 Implement a method dispatchCall() which assigns a call to the first available employee.
-
 """
 
 
