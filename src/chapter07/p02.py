@@ -11,7 +11,7 @@ Implement a method dispatchCall() which assigns a call to the first available em
 """
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import List
 
@@ -30,6 +30,10 @@ class Priority(Enum):
 @dataclass
 class Call:
     priority = Priority
+    assigned_queue: "CallQueue" = field(default=None)
+
+    def register(self, queue: "CallQueue"):
+        self.assigned_queue = queue
 
     def route_to(self, employee: "Employee"):
         employee.call = self
@@ -45,10 +49,20 @@ class Call:
 class Employee:
     state: State
     call: Call
+    assigned_queue: "CallQueue" = field(default=None)
 
-    def escalate_call(self):
+    def escalate_call(self, queue: "CallQueue"):
         if self.call:
             self.call.increase_priority()
+        self.call.register(queue)
+
+    def join_queue(self, queue: "CallQueue"):
+        self.assigned_queue = queue
+        self.state = State.busy
+
+    def leave_queue(self):
+        self.assigned_queue = None  # noqa
+        self.state = State.free
 
 
 @dataclass
@@ -63,16 +77,27 @@ class Director(Employee):
 
 @dataclass
 class CallQueue:
-    queue: List[Call]
+    call: List[Call]
     respondents: List[Employee]
 
+    def register_respondent(self, respondent: Employee):
+        if respondent not in self.respondents:
+            respondent.join_queue(self)
+            self.respondents.append(respondent)
+
+    def deregister_respondent(self, respondent: Employee):
+        if respondent in self.respondents:
+            idx = self.respondents.index(respondent)
+            self.respondents.pop(idx)
+
     def register_call(self, call: Call):
-        self.queue.append(call)
+        self.call.append(call)
 
     def dispatch_call(self):
-        call = self.queue.pop(0)
+        call = self.call.pop(0)
         next_respondent = self.respondents.pop(0)
         call.route_to(next_respondent)
+        self.deregister_respondent(next_respondent)
 
 
 class MangerCallQueue:
