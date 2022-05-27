@@ -1,4 +1,4 @@
-from chapter08.p08 import get_pairs_of_parens
+from chapter08.p09 import get_pairs_of_parens
 
 
 def test_get_pairs_of_parens():
