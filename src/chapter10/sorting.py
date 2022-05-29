@@ -86,3 +86,51 @@ def quick_sort(arr: list[int], start: int, end: int):
         quick_sort(arr, start, last_bigger - 1)
         quick_sort(arr, last_bigger + 1, end)
     return arr
+
+
+def tokenize(arr: list[int]):
+    stringified: list[str] = [str(item) for item in arr]
+    maxlength = max(len(item) for item in stringified)
+    tokenized = [item.rjust(maxlength, "0") for item in stringified]
+    return maxlength, tokenized
+
+
+def counting_sort_by_place(arr: list[int], place: int):
+    max_value, size = max(arr) // place % 10, len(arr)
+    count = [0 for _ in range(max_value + 1)]
+    for item in arr:
+        idx = item // place
+        count[idx % 10] = count[idx % 10] + 1
+
+    # cumulative count
+    for idx, item in enumerate(count):
+        if idx != 0:
+            count[idx] = count[idx] + count[idx - 1]
+
+    result = [0 for _ in range(len(arr))]
+    for i in reversed(range(size)):
+        sorted_idx = count[(arr[i] // place) % 10] - 1
+        result[sorted_idx] = arr[i]
+        count[(arr[i] // place) % 10] -= 1
+
+    return result
+
+
+def counting_sort(arr: list[int]):
+    max_value, size = max(arr), len(arr)
+    count = [0 for _ in range(max_value + 1)]
+    # count items
+    for item in arr:
+        count[item] = count[item] + 1
+
+    # cumulative count
+    for idx, item in enumerate(count):
+        if idx != 0:
+            count[idx] = count[idx] + count[idx - 1]
+
+    result = [0 for _ in range(len(arr))]
+    for i in range(size):
+        sorted_idx = count[arr[i]] - 1
+        result[sorted_idx] = arr[i]
+        count[arr[i]] -= 1
+    return result
